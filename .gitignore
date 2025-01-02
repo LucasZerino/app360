@@ -1,2 +1,112 @@
+# Dependências e builds
+node_modules/
+.next/
+build/
+dist/
+bin/
+tmp/
+out/
+
+# Arquivos de ambiente
 .env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Sistema operacional
 .DS_Store
+Thumbs.db
+*.pem
+
+# IDE e editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+.vs/
+*.sublime-workspace
+*.sublime-project
+
+# Arquivos de teste e cobertura
+coverage/
+*.test
+*.out
+*.prof
+
+# Go específico
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+
+# Yarn e NPM
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+# Next.js específico
+.vercel
+.next
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# TypeScript
+*.tsbuildinfo
+
+# PWA
+public/sw.js
+public/workbox-*.js
+public/worker-*.js
+public/sw.js.map
+public/workbox-*.js.map
+public/worker-*.js.map
+
+# Banco de dados
+*.db
+*.sqlite
+*.sqlite3
+
+# Certificados
+*.crt
+*.key
+*.pem
+
+# Arquivos de backup
+*.bak
+*.backup
+*~
+
+# Arquivos de debug
+debug/
+debug.test
+
+# Arquivos temporários
+*.tmp
+*~
+._*
+
+# Arquivos de configuração local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Arquivos de configuração do banco de dados
+cmd/migrate/migrations/
