@@ -66,7 +66,7 @@ O Bolt 360 é uma aplicação web completa para gerenciamento de negócios, dese
 - `make migrate-up`: Cria as tabelas no banco de dados
 - `make migrate-down`: Remove as tabelas do banco de dados
 - `make migrate-create`: Cria uma nova migração
-- `make dev`: Inicia o servidor de desenvolvimento
+- `go run cmd/api/*.go` || `air` : Inicia o servidor de desenvolvimento
 - `make migrate-create`: Cria uma nova migração
 - `make migrate-up`: Aplica as migrações pendentes
 - `make migrate-down`: Remove as migrações aplicadas

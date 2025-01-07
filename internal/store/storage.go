@@ -1,18 +1,15 @@
 package store
 
-import (
-	"context"
-	"database/sql"
-)
+import "database/sql"
 
+// Storage contém todos os stores da aplicação
 type Storage struct {
-	User interface {
-		Create(ctx context.Context, user *User) error
-	}
+	User *UserStore
 }
 
-func NewStorage(db *sql.DB) Storage {
-	return Storage{
-		User: &UserStore{db},
+// NewStorage inicializa todos os stores
+func NewStorage(db *sql.DB) *Storage {
+	return &Storage{
+		User: NewUserStore(db),
 	}
 }

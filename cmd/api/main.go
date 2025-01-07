@@ -3,15 +3,22 @@ package main
 import (
 	"log"
 
+	"app360/cmd/api/handlers"
+	"app360/internal/db"
+	"app360/internal/env"
+	"app360/internal/store"
+
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	"github.com/sikozonpc/social/internal/db"
-	"github.com/sikozonpc/social/internal/env"
-	"github.com/sikozonpc/social/internal/store"
 )
 
+type application struct {
+	config   config
+	store    *store.Storage
+	handlers *handlers.Handlers
+}
+
 func main() {
-	// Carrega o arquivo .env
 	if err := godotenv.Load(); err != nil {
 		log.Printf("Aviso: Arquivo .env não encontrado: %v", err)
 	}
@@ -19,8 +26,7 @@ func main() {
 	cfg := config{
 		addr: env.GetString("ADDR", ":8080"),
 		db: dbConfig{
-			addr: env.GetString("DB_ADDR",
-				"postgres://user:adminpass@localhost:5432/social?sslmode=disable"),
+			addr:         env.GetString("DB_ADDR", "postgres://postgres:postgres@localhost:5432/app360?sslmode=disable"),
 			maxOpenConns: env.GetInt("DB_MAX_OPEN_CONNS", 30),
 			maxIdleConns: env.GetInt("DB_MAX_IDLE_CONNS", 30),
 			maxIdleTime:  env.GetString("DB_MAX_IDLE_TIME", "15m"),
@@ -36,18 +42,17 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-
 	defer db.Close()
-	log.Println("Database connection pool stablished")
 
 	store := store.NewStorage(db)
+	handlers := handlers.NewHandlers(store)
 
 	app := &application{
-		config: cfg,
-		store:  store,
+		config:   cfg,
+		store:    store,
+		handlers: handlers,
 	}
 
 	mux := app.mount()
-
 	log.Fatal(app.run(mux))
 }

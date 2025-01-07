@@ -4,8 +4,9 @@ import (
 	"net/http"
 	"time"
 
+	"app360/internal/store"
+
 	"github.com/google/uuid"
-	"github.com/sikozonpc/social/internal/store"
 )
 
 func (app *application) healthHandler(w http.ResponseWriter, r *http.Request) {
