@@ -24,6 +24,11 @@ type CreateUserParams struct {
 	Password string `json:"password" validate:"required,min=6"`
 }
 
+type LoginParams struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
+
 type UserStore struct {
 	db *sql.DB
 }
@@ -56,4 +61,31 @@ func (s *UserStore) Create(ctx context.Context, user *User) error {
 	}
 
 	return nil
+}
+
+func (s *UserStore) GetByEmail(ctx context.Context, email string) (*User, error) {
+	query := `
+		SELECT id, name, email, password, image_path, created_at, updated_at
+		FROM users
+		WHERE email = $1 AND deleted_at IS NULL`
+
+	user := &User{}
+	err := s.db.QueryRowContext(ctx, query, email).Scan(
+		&user.ID,
+		&user.Name,
+		&user.Email,
+		&user.Password,
+		&user.ImagePath,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+	)
+
+	if err == sql.ErrNoRows {
+		return nil, fmt.Errorf("usuário não encontrado")
+	}
+	if err != nil {
+		return nil, fmt.Errorf("erro ao buscar usuário: %w", err)
+	}
+
+	return user, nil
 }

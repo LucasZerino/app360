@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"app360/cmd/api/handlers"
+	"app360/internal/auth"
 	"app360/internal/db"
 	"app360/internal/env"
 	"app360/internal/store"
@@ -16,6 +17,7 @@ type application struct {
 	config   config
 	store    *store.Storage
 	handlers *handlers.Handlers
+	jwt      *auth.JWTManager
 }
 
 func main() {
@@ -45,12 +47,13 @@ func main() {
 	defer db.Close()
 
 	store := store.NewStorage(db)
-	handlers := handlers.NewHandlers(store)
+	jwtManager := auth.NewJWTManager(env.GetString("JWT_SECRET", "seu-segredo-aqui"))
 
 	app := &application{
 		config:   cfg,
 		store:    store,
-		handlers: handlers,
+		handlers: handlers.NewHandlers(store, jwtManager),
+		jwt:      jwtManager,
 	}
 
 	mux := app.mount()

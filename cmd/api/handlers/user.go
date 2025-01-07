@@ -14,16 +14,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type Handlers struct {
-	User *UserHandler
-}
-
-func NewHandlers(store *store.Storage) *Handlers {
-	return &Handlers{
-		User: NewUserHandler(store),
-	}
-}
-
 type UserHandler struct {
 	store *store.Storage
 }

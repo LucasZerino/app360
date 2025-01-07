@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"app360/cmd/api/middleware"
+
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
+	chimiddleware "github.com/go-chi/chi/v5/middleware"
 )
 
 type config struct {
@@ -23,11 +25,20 @@ type dbConfig struct {
 func (app *application) mount() http.Handler {
 	router := chi.NewRouter()
 
-	router.Use(middleware.Logger)
-	router.Use(middleware.Recoverer)
+	router.Use(chimiddleware.Logger)
+	router.Use(chimiddleware.Recoverer)
 
-	router.Get("/health", app.healthHandler)
+	// Rotas públicas
 	router.Post("/api/users", app.handlers.User.CreateUser)
+	router.Post("/api/login", app.handlers.Auth.Login)
+
+	// Rotas protegidas
+	router.Group(func(r chi.Router) {
+		r.Use(middleware.AuthMiddleware(app.jwt))
+
+		r.Post("/api/logout", app.handlers.Auth.Logout)
+		// Adicione outras rotas protegidas aqui
+	})
 
 	return router
 }
